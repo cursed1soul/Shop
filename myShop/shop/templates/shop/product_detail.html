@@ -1,0 +1,23 @@
+<a href="{% url 'product_list' %}">← Вернуться к списку</a>
+<hr>
+<div style="display: flex; gap: 40px; margin-top: 20px;">
+    <div>
+        {% if product.image %}
+            <img src="{{ product.image.url }}" style="width: 400px; border-radius: 10px;">
+        {% endif %}
+    </div>
+    <div>
+        <h1>{{ product.title }}</h1>
+        <p><b>Описание:</b> {{ product.description }}</p>
+        <p><b>Цена:</b> <span style="font-size: 24px; color: green;">{{ product.price }} руб.</span></p>
+        <p><b>Остаток на складе:</b> {{ product.quantity }} шт.</p>
+        
+        {% if user.is_authenticated %}
+            <button style="padding: 10px 20px; background: orange; border: none; cursor: pointer;">
+                Добавить в заказ
+            </button>
+        {% endif %}
+    </div>
+</div>
+
+

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Магазин обуви</title>
+</head>
+<body style="font-family: sans-serif; padding: 20px;">
+    <h1>Список обуви</h1>
+
+    <!-- Блок авторизации -->
+    <div style="background: #f4f4f4; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
+        {% if user.is_authenticated %}
+            Вы вошли как: <b>{{ user.username }}</b> 
+            {% if user.role %}({{ user.role.name }}){% endif %} 
+            | <a href="{% url 'login' %}">Выйти</a>
+        {% else %}
+            Вы вошли как: <b>Гость</b> | <a href="{% url 'login' %}">Авторизоваться</a>
+        {% endif %}
+    </div>
+
+    <!-- Сетка товаров -->
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        {% for product in products %}
+            <div style="border: 1px solid #ccc; padding: 15px; width: 220px; text-align: center; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
+                
+                <!-- Ссылка на товар через картинку -->
+                <a href="{% url 'product_detail' product.pk %}">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}" style="width: 100%; height: 150px; object-fit: contain;">
+                    {% else %}
+                        <div style="width: 100%; height: 150px; background: #eee; line-height: 150px; color: #666;">Нет фото</div>
+                    {% endif %}
+                </a>
+                
+                <h3><a href="{% url 'product_detail' product.pk %}" style="text-decoration: none; color: #007bff;">{{ product.title }}</a></h3>
+                
+                <p><strong>Цена: {{ product.price }} руб.</strong></p>
+                <p style="font-size: 0.9em; color: #555;">Остаток: {{ product.quantity }} шт.</p>
+
+                <!-- Кнопки управления (только для Админа) -->
+                {% if user.is_authenticated and user.role.name == "Администратор" %}
+                    <hr>
+                    <div style="margin-top: 10px;">
+                        <button style="color: blue; cursor: pointer; padding: 5px 10px;">Ред.</button>
+                        
+                        <a href="{% url 'product_delete' product.pk %}" 
+                           onclick="return confirm('Вы точно хотите удалить этот товар?')"
+                           style="display: inline-block; color: red; text-decoration: none; font-size: 0.9em; border: 1px solid red; padding: 4px 8px; border-radius: 3px; margin-left: 5px;">
+                           Удалить
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Товары не найдены.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,16 @@
+<h2>Вход в систему</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <p style="color: red;">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <p>Логин: <input type="text" name="username" required></p>
+    <p>Пароль: <input type="password" name="password" required></p>
+    <button type="submit">Войти</button>
+</form>
+<hr>
+<a href="{% url 'product_list' %}">Продолжить как гость</a>
